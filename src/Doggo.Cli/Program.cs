@@ -7,8 +7,6 @@ internal class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        args = new[] { "fetch", "-b", "donut" };
-
         var registrations = new ServiceCollection();
         registrations.AddServices();
 

@@ -1,0 +1,51 @@
+name: Build and Package Doggo.Cli
+
+on:
+  # Manually trigger the workflow
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the latest code from the main branch
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      # Set up .NET SDK
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0'
+
+      # Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Build the CLI app
+      - name: Build the project
+        run: dotnet publish -c Release -r linux-x64 --self-contained true --output ./output
+
+      # Create a versioned .zip file
+      - name: Package as .zip
+        run: |
+          VERSION=${{ github.event.inputs.version }}
+          ZIP_NAME="cli-app-${VERSION}-linux-x64.zip"
+          cd ./output
+          zip -r $ZIP_NAME .  # Create zip of the build directory
+          mv $ZIP_NAME ../${ZIP_NAME}  # Move the zip to the root directory
+
+      # Upload the .zip artifact
+      - name: Upload the release artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: cli-app
+          path: ./cli-app-${{ github.event.inputs.version }}-linux-x64.zip

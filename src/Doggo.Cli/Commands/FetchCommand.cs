@@ -21,8 +21,9 @@ public class FetchCommand : AsyncCommand<FetchCommand.Settings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var ascii = await _renderImageAppService.ExecuteAsync(settings.Breed);
-        AnsiConsole.Write(ascii);
+        var response = await _renderImageAppService.ExecuteAsync(settings.Breed);
+        AnsiConsole.Markup(response.Ascii);
+        AnsiConsole.Write("Original image url: {0}", response.OriginalImageUrl);
         return 1;
     }
 }

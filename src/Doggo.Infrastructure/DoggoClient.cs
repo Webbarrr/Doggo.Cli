@@ -1,6 +1,6 @@
-﻿using System.Text.Json;
-using Doggo.Application.Contracts;
+﻿using Doggo.Application.Contracts;
 using Doggo.Application.Dtos;
+using System.Text.Json;
 
 namespace Doggo.Infrastructure;
 

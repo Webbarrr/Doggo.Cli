@@ -1,6 +1,8 @@
-﻿namespace Doggo.Application.Contracts;
+﻿using Doggo.Application.Dtos;
+
+namespace Doggo.Application.Contracts;
 
 public interface IRenderImageAppService
 {
-    Task<string> ExecuteAsync(string? breed);
+    Task<RenderImageAppServiceResponse> ExecuteAsync(string? breed);
 }

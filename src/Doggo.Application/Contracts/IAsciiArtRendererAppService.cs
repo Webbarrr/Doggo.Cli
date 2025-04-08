@@ -1,7 +1,7 @@
 ﻿using Doggo.Application.Dtos;
 
 namespace Doggo.Application.Contracts;
-public interface IAsciiArtRendererAppService
+public interface IAsciiArtRendererService
 {
     string ConvertToAscii(ConvertToAsciiRequest request);
 }

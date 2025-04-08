@@ -2,20 +2,20 @@
 using Doggo.Application.Dtos;
 using Microsoft.Extensions.Logging;
 
-namespace Doggo.Application.Services;
+namespace Doggo.Application.AppServices;
 
 public class RenderImageAppService : IRenderImageAppService
 {
     private readonly ILogger<RenderImageAppService> _logger;
     private readonly IDoggoClient _doggoClient;
     private readonly IImageDownloader _imageDownloader;
-    private readonly IAsciiArtRendererAppService _asciiArtRendererAppService;
+    private readonly IAsciiArtRendererService _asciiArtRendererAppService;
 
     public RenderImageAppService(
         ILogger<RenderImageAppService> logger,
         IDoggoClient doggoClient,
         IImageDownloader imageDownloader,
-        IAsciiArtRendererAppService asciiArtRendererAppService)
+        IAsciiArtRendererService asciiArtRendererAppService)
     {
         _logger = logger;
         _doggoClient = doggoClient;
@@ -23,7 +23,7 @@ public class RenderImageAppService : IRenderImageAppService
         _asciiArtRendererAppService = asciiArtRendererAppService;
     }
 
-    public async Task<string> ExecuteAsync(string? breed)
+    public async Task<RenderImageAppServiceResponse> ExecuteAsync(string? breed)
     {
         DoggoResponseDto doggoResponse;
 
@@ -50,6 +50,10 @@ public class RenderImageAppService : IRenderImageAppService
             throw new Exception("Failed to convert image to ASCII.");
         }
 
-        return ascii;
+        return new RenderImageAppServiceResponse
+        {
+            Ascii = ascii,
+            OriginalImageUrl = doggoResponse.Message,
+        };
     }
 }

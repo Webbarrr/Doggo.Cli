@@ -1,4 +1,5 @@
-﻿using Doggo.Application.Contracts;
+﻿using Doggo.Application.AppServices;
+using Doggo.Application.Contracts;
 using Doggo.Application.Services;
 using Doggo.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,6 @@ public static class ServiceCollectionExtensions
 
         // application
         services.AddSingleton<IRenderImageAppService, RenderImageAppService>();
-        services.AddSingleton<IAsciiArtRendererAppService, AsciiArtRendererAppService>();
+        services.AddSingleton<IAsciiArtRendererService, AsciiArtRendererService>();
     }
 }

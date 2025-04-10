@@ -3,10 +3,10 @@ name: Build and Publish Doggo
 on:
   workflow_dispatch:  # Enables manual trigger from GitHub UI
     inputs:
-        version:
-            description: 'Version or tag for this build'
-            required: true
-            default: 'v1.0.0'
+      version:
+        description: 'Version or tag for this build'
+        required: true
+        default: 'v1.0.0'
 
 jobs:
   build:
@@ -37,3 +37,11 @@ jobs:
         with:
           name: doggo
           path: ./publish/doggo.exe
+
+      - name: Create Release on GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./publish/doggo.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          

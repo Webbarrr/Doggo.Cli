@@ -42,7 +42,8 @@ public class RenderImageAppService : IRenderImageAppService
         var ascii = _asciiArtRendererAppService.ConvertToAscii(new ConvertToAsciiRequest
         {
             ImageStream = stream,
-            MaxWidth = 100,
+            MaxWidth = 80,
+            MaxHeight = 80,
         });
 
         if (string.IsNullOrWhiteSpace(ascii))

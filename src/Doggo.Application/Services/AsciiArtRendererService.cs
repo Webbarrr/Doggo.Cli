@@ -9,14 +9,14 @@ namespace Doggo.Application.Services;
 
 public class AsciiArtRendererService : IAsciiArtRendererService
 {
-    private const string _asciiChars = "@#*+=-:. ";  // dark to light
+    private const string _asciiChars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}?-_+~<>i!lI;:,\".";
 
     public string ConvertToAscii(ConvertToAsciiRequest request)
     {
         request.ValidateAndThrow();
 
         using var image = Image.Load<Rgba32>(request.ImageStream);
-        ResizeImage(image, request.MaxWidth);
+        ResizeImage(image, request.MaxWidth, request.MaxHeight);
 
         var sb = new StringBuilder();
 
@@ -37,11 +37,17 @@ public class AsciiArtRendererService : IAsciiArtRendererService
         return sb.ToString();
     }
 
-
-    private Image<Rgba32> ResizeImage(Image<Rgba32> image, int maxWidth)
+    private Image<Rgba32> ResizeImage(Image<Rgba32> image, int maxWidth, int maxHeight)
     {
-        int newWidth = Math.Min(maxWidth, image.Width);
-        int newHeight = (int)(image.Height / (double)image.Width * newWidth * 0.45);
+        const double charAspectRatio = 0.45;
+
+        double widthScale = maxWidth / (double)image.Width;
+        double heightScale = maxHeight / (image.Height * charAspectRatio);
+
+        double scale = Math.Min(widthScale, heightScale);
+
+        int newWidth = (int)(image.Width * scale);
+        int newHeight = (int)(image.Height * scale * charAspectRatio);
 
         image.Mutate(x => x.Resize(newWidth, newHeight));
         return image;
@@ -59,7 +65,8 @@ public class AsciiArtRendererService : IAsciiArtRendererService
 
     private char GetAsciiChar(float brightness)
     {
-        int index = (int)((brightness / 255) * (_asciiChars.Length - 1));
+        int index = (int)Math.Ceiling((_asciiChars.Length - 1) * brightness / 255);
+        index = Math.Min(index, _asciiChars.Length - 1);
         return _asciiChars[index];
     }
 }

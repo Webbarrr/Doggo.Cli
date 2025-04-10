@@ -38,10 +38,14 @@ jobs:
           name: doggo
           path: ./publish/doggo.exe
 
+      - name: Create GitHub Release Tag
+        run: |
+          git tag ${{ github.event.inputs.version }}
+          git push origin ${{ github.event.inputs.version }}
+        
       - name: Create Release on GitHub
         uses: softprops/action-gh-release@v1
         with:
           files: ./publish/doggo.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          

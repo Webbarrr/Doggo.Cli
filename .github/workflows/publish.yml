@@ -1,0 +1,38 @@
+name: Build and Publish Doggo
+
+on:
+  workflow_dispatch:  # Enables manual trigger from GitHub UI
+    inputs:
+        version:
+            description: 'Version or tag for this build'
+            required: true
+            default: 'v1.0.0'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Publish app
+        run: |
+          dotnet publish -c Release -r win-x64 --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -o ./publish
+
+      - name: Rename output to doggo.exe
+        run: Rename-Item ./publish/Doggo.Cli.exe doggo.exe
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: doggo
+          path: ./publish/doggo.exe

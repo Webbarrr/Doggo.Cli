@@ -2,6 +2,7 @@
 using Doggo.Application.Contracts;
 using Doggo.Application.Services;
 using Doggo.Infrastructure;
+using Doggo.Infrastructure.ImageSource;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -29,7 +30,10 @@ public static class ServiceCollectionExtensions
 
         // infrastructure
         services.AddSingleton<IDoggoClient, DoggoClient>();
-        services.AddSingleton<IImageDownloader, ImageDownloader>();
+
+        services.AddSingleton<ApiImageSource>();
+        services.AddSingleton<LocalFileImageSource>();
+        services.AddSingleton<IImageSourceFactory, ImageSourceFactory>();
 
         // application
         services.AddSingleton<IRenderImageAppService, RenderImageAppService>();

@@ -1,42 +1,48 @@
 ﻿using Doggo.Application.Contracts;
 using Doggo.Application.Dtos;
-using Microsoft.Extensions.Logging;
 
 namespace Doggo.Application.AppServices;
 
 public class RenderImageAppService : IRenderImageAppService
 {
-    private readonly ILogger<RenderImageAppService> _logger;
     private readonly IDoggoClient _doggoClient;
-    private readonly IImageDownloader _imageDownloader;
     private readonly IAsciiArtRendererService _asciiArtRendererAppService;
+    private readonly IImageSourceFactory _imageSourceFactory;
 
     public RenderImageAppService(
-        ILogger<RenderImageAppService> logger,
         IDoggoClient doggoClient,
-        IImageDownloader imageDownloader,
-        IAsciiArtRendererService asciiArtRendererAppService)
+        IAsciiArtRendererService asciiArtRendererAppService,
+        IImageSourceFactory imageSourceFactory)
     {
-        _logger = logger;
         _doggoClient = doggoClient;
-        _imageDownloader = imageDownloader;
         _asciiArtRendererAppService = asciiArtRendererAppService;
+        _imageSourceFactory = imageSourceFactory;
     }
 
-    public async Task<RenderImageAppServiceResponse> ExecuteAsync(string? breed)
+    public async Task<RenderImageAppServiceResponse> ExecuteAsync(RenderImageAppServiceRequest request)
     {
         DoggoResponseDto doggoResponse;
+        string source;
 
-        if (string.IsNullOrWhiteSpace(breed))
+        if (string.IsNullOrWhiteSpace(request.Path))
         {
-            doggoResponse = await _doggoClient.RandomAsync();
+            if (string.IsNullOrWhiteSpace(request.Breed))
+            {
+                doggoResponse = await _doggoClient.RandomAsync();
+            }
+            else
+            {
+                doggoResponse = await _doggoClient.RandomByBreedAsync(request.Breed);
+            }
+            source = doggoResponse.Message;
         }
         else
         {
-            doggoResponse = await _doggoClient.RandomByBreedAsync(breed);
+            source = request.Path;
         }
 
-        var bytes = await _imageDownloader.GetImageBytesAsync(doggoResponse.Message);
+        IImageSource imageSource = _imageSourceFactory.Create(source);
+        var bytes = await imageSource.GetImageBytesAsync(source);
 
         using var stream = new MemoryStream(bytes);
         var ascii = _asciiArtRendererAppService.ConvertToAscii(new ConvertToAsciiRequest
@@ -54,7 +60,7 @@ public class RenderImageAppService : IRenderImageAppService
         return new RenderImageAppServiceResponse
         {
             Ascii = ascii,
-            OriginalImageUrl = doggoResponse.Message,
+            OriginalImageUrl = source,
         };
     }
 }

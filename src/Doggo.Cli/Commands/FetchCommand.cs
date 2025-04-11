@@ -1,4 +1,5 @@
 ﻿using Doggo.Application.Contracts;
+using Doggo.Application.Dtos;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -12,6 +13,9 @@ public class FetchCommand : AsyncCommand<FetchCommand.Settings>
     {
         [CommandOption("-b|--breed")]
         public string Breed { get; set; } = string.Empty;
+
+        [CommandOption("-p|--path")]
+        public string Path { get; set; } = string.Empty;
     }
 
     public FetchCommand(IRenderImageAppService renderImageAppService)
@@ -21,9 +25,17 @@ public class FetchCommand : AsyncCommand<FetchCommand.Settings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var response = await _renderImageAppService.ExecuteAsync(settings.Breed);
+        var request = new RenderImageAppServiceRequest
+        {
+            Breed = settings.Breed,
+            Path = settings.Path,
+        };
+        request.ValidateAndThrow();
+
+        var response = await _renderImageAppService.ExecuteAsync(request);
         AnsiConsole.Markup(response.Ascii);
         AnsiConsole.Write("Original image url: {0}", response.OriginalImageUrl);
-        return 1;
+        
+        return 0;
     }
 }

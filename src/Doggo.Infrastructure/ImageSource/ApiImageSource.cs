@@ -1,19 +1,19 @@
 ﻿using Doggo.Application.Contracts;
 
-namespace Doggo.Infrastructure;
+namespace Doggo.Infrastructure.ImageSource;
 
-public class ImageDownloader : IImageDownloader
+public class ApiImageSource : IImageSource
 {
     private readonly HttpClient _httpClient;
 
-    public ImageDownloader(HttpClient httpClient)
+    public ApiImageSource(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
-    public async Task<byte[]> GetImageBytesAsync(string imageUrl)
+    public async Task<byte[]> GetImageBytesAsync(string imagePath)
     {
-        var response = await _httpClient.GetAsync(imageUrl);
+        var response = await _httpClient.GetAsync(imagePath);
         if (response.IsSuccessStatusCode)
         {
             return await response.Content.ReadAsByteArrayAsync();

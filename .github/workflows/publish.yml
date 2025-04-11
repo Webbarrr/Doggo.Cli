@@ -41,9 +41,6 @@ jobs:
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh auth setup-git
-          gh release create ${{ github.event.inputs.version }} ./publish/doggo.exe \
-          --title "Release ${{ github.event.inputs.version }}" \
-          --notes "Automated release by GitHub Actions"
+        run: gh release create ${{ github.event.inputs.version }} ./publish/doggo.exe --title "Release ${{ github.event.inputs.version }}" --notes "Automated release by GitHub Actions"
+        
   

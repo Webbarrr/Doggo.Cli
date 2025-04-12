@@ -16,3 +16,13 @@
 Build can be modified to work on different windows / os versions
 
 Images provided via https://dog.ceo/dog-api/
+
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+It uses [ImageSharp](https://github.com/SixLabors/ImageSharp), which is licensed under the [Apache 2.0 License](https://github.com/SixLabors/ImageSharp/blob/main/LICENSE).
+
+Please refer to each license for more details.
+

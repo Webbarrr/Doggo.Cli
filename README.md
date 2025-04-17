@@ -7,6 +7,7 @@
 4. Doggo.Cli.exe fetch -b <breed>
 5. Doggo.clie.exe fetch --breed <breed>
 
+Thank you to [MarkWAppleton](https://github.com/MarkWAppleton) to reducing the build size by 85.5%
 
 # Building
 1. Ensure you have the dotnet cli installed
@@ -16,7 +17,6 @@
 Build can be modified to work on different windows / os versions
 
 Images provided via https://dog.ceo/dog-api/
-
 
 ## License
 

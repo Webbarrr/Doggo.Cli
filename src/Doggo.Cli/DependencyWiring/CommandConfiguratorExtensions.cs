@@ -10,6 +10,10 @@ public static class CommandConfiguratorExtensions
         config.AddCommand<FetchCommand>("fetch")
             .WithDescription("Fetch a random dog image.")
             .WithExample(new[] { "fetch", "-b", "boxer" })
-            .WithExample(new[] { "fetch", "--breed", "boxer" });
+            .WithExample(new[] { "fetch", "--breed", "boxer" })
+            .WithExample(new[] { "fetch", "-p", @"path\to\image" })
+            .WithExample(new[] { "fetch", "--path", @"path\to\image" })
+            .WithExample(new[] { "fetch", "-p", "imageurl.jpg" })
+            .WithExample(new[] { "fetch", "--path", "imageurl.jpg" });
     }
 }

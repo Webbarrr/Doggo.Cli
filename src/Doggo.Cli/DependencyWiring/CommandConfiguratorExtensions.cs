@@ -14,10 +14,12 @@ public static class CommandConfiguratorExtensions
             .WithExample(new[] { "fetch", "-p", @"path\to\image" })
             .WithExample(new[] { "fetch", "--path", @"path\to\image" })
             .WithExample(new[] { "fetch", "-p", "imageurl.jpg" })
-            .WithExample(new[] { "fetch", "--path", "imageurl.jpg" });
+            .WithExample(new[] { "fetch", "--path", "imageurl.jpg" })
+            .WithExample(new[] { "fetch", "--output", "<path>"});
 
         config.AddCommand<ListBreedsCommand>("list-breeds")
             .WithDescription("Outputs a list of possible breeds")
-            .WithExample(new[] { "--list-breeds" });
+            .WithExample(new[] { "list-breeds" })
+            .WithExample(new[] { "list-breeds", "--output", "<path>" });
     }
 }

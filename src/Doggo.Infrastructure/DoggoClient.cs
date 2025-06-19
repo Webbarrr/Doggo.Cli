@@ -41,6 +41,42 @@ public class DoggoClient : IDoggoClient
         return HandleResponse(jsonResponse);
     }
 
+    public async Task<IEnumerable<string>> ListBreedsAsync()
+    {
+        var url = $"{_baseUrl}breeds/list/all";
+        var uri = new Uri(url);
+
+        var request = new HttpRequestMessage(HttpMethod.Get, uri);
+        var jsonResponse = await SendRequest(request);
+
+        if (string.IsNullOrWhiteSpace(jsonResponse))
+        {
+            throw new Exception("Response is empty");
+        }
+
+        return FlattenBreedsResponse(jsonResponse);
+    }
+
+    private List<string> FlattenBreedsResponse(string jsonResponse)
+    {
+        using JsonDocument doc = JsonDocument.Parse(jsonResponse);
+
+        var breeds = new HashSet<string>();
+
+        if (doc.RootElement.TryGetProperty("message", out JsonElement message))
+        {
+            foreach (JsonProperty breedEntry in message.EnumerateObject())
+            {
+                string breed = breedEntry.Name;
+                JsonElement subBreeds = breedEntry.Value;
+
+                breeds.Add(breed);
+            }
+        }
+
+        return breeds.ToList();
+    }
+
     private async Task<string> SendRequest(HttpRequestMessage request)
     {
         var response = await _httpClient.SendAsync(request);
@@ -57,7 +93,7 @@ public class DoggoClient : IDoggoClient
 
     private DoggoResponseDto HandleResponse(string? jsonResponse)
     {
-        if (string.IsNullOrEmpty(jsonResponse))
+        if (string.IsNullOrWhiteSpace(jsonResponse))
         {
             throw new Exception("Response is empty");
         }

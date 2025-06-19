@@ -23,11 +23,7 @@ jobs:
 
       - name: Publish app
         run: |
-          dotnet publish ./src/Doggo.Cli/Doggo.Cli.csproj -c Release -r win-x64 --self-contained true `
-            -p:PublishSingleFile=true `
-            -p:UseAppHost=true `
-            -p:IncludeNativeLibrariesForSelfExtract=true `
-            -o ./publish
+          dotnet publish ./src/Doggo.Cli/Doggo.Cli.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:UseAppHost=true -o ./publish -p:DebugType=None -p:DebugSymbols=false
 
       - name: Rename output to doggo.exe
         run: Rename-Item ./publish/Doggo.Cli.exe doggo.exe

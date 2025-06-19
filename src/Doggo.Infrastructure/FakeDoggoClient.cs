@@ -25,4 +25,9 @@ public class FakeDoggoClient : IDoggoClient
             Status = "success",
         });
     }
+
+    public Task<IEnumerable<string>> ListBreedsAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

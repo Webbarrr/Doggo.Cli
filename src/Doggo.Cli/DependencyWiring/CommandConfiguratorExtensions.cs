@@ -15,5 +15,9 @@ public static class CommandConfiguratorExtensions
             .WithExample(new[] { "fetch", "--path", @"path\to\image" })
             .WithExample(new[] { "fetch", "-p", "imageurl.jpg" })
             .WithExample(new[] { "fetch", "--path", "imageurl.jpg" });
+
+        config.AddCommand<ListBreedsCommand>("list-breeds")
+            .WithDescription("Outputs a list of possible breeds")
+            .WithExample(new[] { "--list-breeds" });
     }
 }

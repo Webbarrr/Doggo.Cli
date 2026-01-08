@@ -23,7 +23,7 @@ public class ListBreedsCommand : AsyncCommand<ListBreedsCommand.Settings>
         _outputAppService = outputAppService;
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         var breeds = await _doggoClient.ListBreedsAsync();
 

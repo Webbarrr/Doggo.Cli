@@ -28,7 +28,7 @@ public class FetchCommand : AsyncCommand<FetchCommand.Settings>
         _outputAppService = outputAppService;
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         var request = new RenderImageAppServiceRequest
         {

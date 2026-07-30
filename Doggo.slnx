@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Doggo.Application/Doggo.Application.csproj" />
+    <Project Path="src/Doggo.Cli/Doggo.Cli.csproj" />
+    <Project Path="src/Doggo.Domain/Doggo.Domain.csproj" />
+    <Project Path="src/Doggo.Infrastructure/Doggo.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Doggo.Tests/Doggo.Tests.csproj" />
+  </Folder>
+</Solution>
